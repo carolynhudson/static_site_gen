@@ -21,7 +21,7 @@ class TestLeafNode(unittest.TestCase):
         self.assertRaises(ValueError, LeafNode("a", None).to_html)
 
 
-class TestParentfNode(unittest.TestCase):
+class TestParentNode(unittest.TestCase):
     def test_eq(self):
         test_node1 = ParentNode(
             "p",
@@ -47,8 +47,8 @@ class TestParentfNode(unittest.TestCase):
                 LeafNode(None, "L1-1 Normal text"),
                 LeafNode("i", "L1-2 italic text")
             ], {"href": "https://www.google.com"})
-        self.assertEqual(test_node1.to_html(), "<p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p>")
-        self.assertEqual(test_node2.to_html(), '<span href="https://www.google.com"><p><b>L2-1 Bold text</b>L2-1 Normal text</p><p><b>L2-2 Bold text</b>L2-2 Normal text</p>L1-1 Normal text<i>L1-2 italic text</i></span>')
+        self.assertEqual(test_node1.to_html(), "<p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p>\n")
+        self.assertEqual(test_node2.to_html(), '<span href="https://www.google.com"><p><b>L2-1 Bold text</b>L2-1 Normal text</p>\n<p><b>L2-2 Bold text</b>L2-2 Normal text</p>\nL1-1 Normal text<i>L1-2 italic text</i></span>\n')
         self.assertEqual(str(ParentNode("p", [LeafNode(None, "My Text")])), "ParentNode(p, [LeafNode(My Text)])")
 
 

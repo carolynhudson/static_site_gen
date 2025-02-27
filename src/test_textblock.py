@@ -69,7 +69,7 @@ main()```
         test_ans = [TextBlock("This is a Test", BlockType.HEADING, "#"),
                     TextBlock("This is a **markdown** test paragraph.\nI am making it to demonstrate blocking.", BlockType.PARAGRAPH),
                     TextBlock("Testing Unordered Lists\nAgain...\nAnd again...", BlockType.UNORDERED_LIST, "*"),
-                    TextBlock('def main():\ntest =  TextNode("This is a text node", TextType.BOLD, "https://www.boot.dev")\nprint(test)\nprint("hello world")\nmain()', BlockType.CODE),
+                    TextBlock('def main():\n    test =  TextNode("This is a text node", TextType.BOLD, "https://www.boot.dev")\n    print(test)\nprint("hello world")\nmain()', BlockType.CODE),
                     TextBlock("New Ordered List", BlockType.HEADING, "##"), 
                     TextBlock("**First**\n*Second*\n[Google the Third](https://www.google.com/)", BlockType.ORDERED_LIST),
                     TextBlock("Quotetastic:", BlockType.HEADING, "###"),
@@ -82,7 +82,7 @@ class Test_to_HTMLNode(unittest.TestCase):
     def test_eq(self):
         self.assertEqual(str(TextBlock("Heading", BlockType.HEADING, "##").to_htmlnode()), str(ParentNode("h2",[LeafNode("", "Heading")])))
         self.assertEqual(str(TextBlock("Paragraph", BlockType.PARAGRAPH).to_htmlnode()), str(ParentNode("p",[LeafNode("", "Paragraph")])))
-        self.assertEqual(str(TextBlock("Code", BlockType.CODE).to_htmlnode()), str(ParentNode("code",[LeafNode("", "Code")])))
+        self.assertEqual(str(TextBlock("Code", BlockType.CODE).to_htmlnode()), str(ParentNode("code",[LeafNode("", "Code\n")])))
         self.assertEqual(str(TextBlock("Quote", BlockType.QUOTE).to_htmlnode()), str(ParentNode("blockquote",[LeafNode("", "Quote")])))
         self.assertEqual(str(TextBlock("Ordered List", BlockType.ORDERED_LIST).to_htmlnode()), str(ParentNode("ol",[ParentNode("li",[LeafNode("", "Ordered List")])])))
         self.assertEqual(str(TextBlock("Unordered List", BlockType.UNORDERED_LIST, "*").to_htmlnode()), str(ParentNode("ul",[ParentNode("li",[LeafNode("", "Unordered List")])])))

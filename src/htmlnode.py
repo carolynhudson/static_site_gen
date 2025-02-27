@@ -38,4 +38,4 @@ class ParentNode(HTMLNode):
         elif self.children is None or type(self.children) is not list or len(self.children) == 0:
             raise ValueError("A ParentNode must have a children list containing of at least one child node.")
         else:
-            return f'<{" ".join([v for v in [self.tag, self.props_to_html()] if v != ""])}>{"".join([c.to_html() for c in self.children])}</{self.tag}>'
+            return f'<{" ".join([v for v in [self.tag, self.props_to_html()] if v != ""])}>{"".join([c.to_html() for c in self.children])}</{self.tag}>\n'

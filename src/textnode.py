@@ -82,7 +82,9 @@ class TextNode:
         operations = [TextNode._split_nodes_image, 
                     TextNode._split_nodes_link,
                     lambda nodes: TextNode._split_nodes_delimiter(nodes, "**", TextType.BOLD),
+                    lambda nodes: TextNode._split_nodes_delimiter(nodes, "__", TextType.BOLD),
                     lambda nodes: TextNode._split_nodes_delimiter(nodes, "*", TextType.ITALIC), 
+                    lambda nodes: TextNode._split_nodes_delimiter(nodes, "_", TextType.ITALIC), 
                     lambda nodes: TextNode._split_nodes_delimiter(nodes, "`", TextType.CODE)]
         nodes = [TextNode(text)]
         for func in operations:

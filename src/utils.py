@@ -43,7 +43,7 @@ def copy_folder(source: str, destination: str):
     if os.path.isfile(source):
         objects_to_copy = [(source, os.path.join(destination, os.path.basename(source)))]
     else:
-        objects_to_copy = [(path, os.path.join(destination, path.removeprefix(source).lstrip(os.path.pathsep))) for path in list_directory(source)]
+        objects_to_copy = [(path, os.path.join(destination, path.removeprefix(source).lstrip("/"))) for path in list_directory(source)]
     
     for source_object, destination_object in objects_to_copy:
         if os.path.isfile(source_object):
@@ -76,9 +76,9 @@ def generate_page(from_path : str, template_path : str, dest_path: str):
     html = markdown_to_html_node(markdown).to_html()
     html = template.replace("{{ Content }}", html).replace("{{ Title }}", extract_title(markdown))
     
-    dest_path_list = dest_path.split(os.path.pathsep)
+    dest_path_list = dest_path.split("/")
     for i in range(1, len(dest_path_list)):
-        dest_sub_path = os.path.join(dest_path_list[:i])
+        dest_sub_path = os.path.join(*dest_path_list[:i])
         if not os.path.exists(dest_sub_path):
             os.mkdir(dest_sub_path)
     dest_file = open(dest_path, "w")
