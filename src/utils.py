@@ -84,3 +84,7 @@ def generate_page(from_path : str, template_path : str, dest_path: str):
     dest_file = open(dest_path, "w")
     dest_file.write(html)
     dest_file.close()
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    for page_to_generate in [(content, template_path, dest_dir_path + content.removeprefix(dir_path_content).removesuffix(".md") + ".html") for content in list_directory(dir_path_content) if content.endswith(".md")]:
+        generate_page(*page_to_generate)
