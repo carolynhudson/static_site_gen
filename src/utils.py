@@ -64,7 +64,7 @@ def extract_title(markdown : str) -> str:
     else:
         return title[0]
 
-def generate_page(from_path : str, template_path : str, dest_path: str):
+def generate_page(from_path : str, template_path : str, dest_path: str, base_path: str = "/"):
     print(f"Generating page from '{from_path}' to '{dest_path}' using '{template_path}'.")
     if not os.path.exists(from_path) or not os.path.exists(template_path):
         if os.path.exists(from_path):
@@ -74,7 +74,7 @@ def generate_page(from_path : str, template_path : str, dest_path: str):
         
     markdown, template = (open(from_path).read(), open(template_path).read())
     html = markdown_to_html_node(markdown).to_html()
-    html = template.replace("{{ Content }}", html).replace("{{ Title }}", extract_title(markdown))
+    html = template.replace("{{ Content }}", html).replace("{{ Title }}", extract_title(markdown)).replace('href="/', f'href="{base_path}').replace('src="/', f'src="{base_path}')
     
     dest_path_list = dest_path.split("/")
     for i in range(1, len(dest_path_list)):
@@ -85,6 +85,6 @@ def generate_page(from_path : str, template_path : str, dest_path: str):
     dest_file.write(html)
     dest_file.close()
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
-    for page_to_generate in [(content, template_path, dest_dir_path + content.removeprefix(dir_path_content).removesuffix(".md") + ".html") for content in list_directory(dir_path_content) if content.endswith(".md")]:
+def generate_pages_recursive(dir_path_content : str, template_path: str, dest_dir_path: str, base_path: str = "/"):
+    for page_to_generate in [(content, template_path, dest_dir_path + content.removeprefix(dir_path_content).removesuffix(".md") + ".html", base_path) for content in list_directory(dir_path_content) if content.endswith(".md")]:
         generate_page(*page_to_generate)

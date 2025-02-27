@@ -8,4 +8,4 @@ BLOCKTYPE_CLEANERS = [("Heading", r"^\#{1,6}\s+"), ("Code", r"^```|```$"), ("Quo
 BLOCKTYPE_GET_STYLE = [("Heading", r"^(\#{1,6})\s"), ("Code", r""), ("Quote", r""), ("Unordered_List", r"^([\*\-])\s"), ("Ordered_List", r""), ("Paragraph", r"")]
 MARKDOWN_CONTENT_FOLDER = "./content"
 STATIC_CONTENT_FOLDER = "./static"
-SITE_ROOT_FOLDER = "./public"
+SITE_ROOT_FOLDER = "./docs"
