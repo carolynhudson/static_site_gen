@@ -18,7 +18,10 @@ class TextBlock:
         self.text = text
         self.block_type = block_type
         self.block_style = block_style
-        self.__text_nodes = [[TextNode(line + "\n")] if block_type == BlockType.CODE else TextNode.text_to_textnodes(line) for line in text.splitlines()]
+        self.__text_nodes = [line_list_of_nodes for line_list_of_nodes in 
+                             [[TextNode(line + "\n")] if block_type == BlockType.CODE else TextNode.text_to_textnodes(" " if len(line) == 0 and block_type == BlockType.QUOTE else line) 
+                                   for line in text.splitlines()] 
+                                        if len(line_list_of_nodes) > 0]
 
     def __eq__(self, value : 'TextBlock') -> bool:
         return self.text == value.text and self.block_type == value.block_type and self.block_style == value.block_style
@@ -27,6 +30,9 @@ class TextBlock:
         return f"TextBlock({self.block_type.value}, {self.block_style}, {self.text})"
     
     def to_htmlnode(self) -> ParentNode:
+        if len(self.__text_nodes) == 0:
+            self.__text_nodes = [[TextNode(self.text, TextType.NORMAL)]]
+
         match self.block_type:
             case BlockType.PARAGRAPH:
                 return ParentNode("p", [node.to_html_node() for line_nodes in self.__text_nodes for node in line_nodes])
@@ -44,7 +50,11 @@ class TextBlock:
     def _text_to_block_type(text : str) -> BlockType:
         pattern = re.compile(BLOCKTYPE_IDENTIFIER, re.MULTILINE + re.DOTALL)
         block_tuples = [([BlockType(key) for key, value in match.groupdict().items() if value is not None][0], match[0].rstrip(". ")) if len(set(match.groupdict().values())) > 1 else ("Paragraph", "") for match in pattern.finditer(text)]
-        block_type = block_tuples[0][0]
+        if len(block_tuples) > 0:
+            block_type = block_tuples[0][0]
+        else:
+            block_type = BlockType.PARAGRAPH
+
         match block_type:
             case BlockType.QUOTE:
                 return BlockType.QUOTE if all([line_type == BlockType.QUOTE for line_type, match_str in block_tuples]) else BlockType.PARAGRAPH
@@ -68,7 +78,9 @@ class TextBlock:
         get_style_re_dict = {BlockType(type_val): (re.compile(regex, re.MULTILINE) if len(regex) > 0 else None) for type_val, regex in BLOCKTYPE_GET_STYLE}
         get_style = lambda block_type, text: (None if get_style_re_dict[block_type] is None else get_style_re_dict[block_type].search(text)[1])
 
-        return [TextBlock(cleaner(block_type, text).strip(), block_type, get_style(block_type, text)) for text, block_type in [(text, TextBlock._text_to_block_type(text)) for text in TextBlock._markdown_to_blocks(markdown)]]
+        return [TextBlock(*tb_tuple) for tb_tuple in 
+                  [(cleaner(block_type, text).strip(), block_type, get_style(block_type, text)) for text, block_type in 
+                     [(text, TextBlock._text_to_block_type(text)) for text in TextBlock._markdown_to_blocks(markdown)]] if len(tb_tuple[0]) > 0]
     
 
 

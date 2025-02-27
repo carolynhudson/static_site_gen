@@ -36,6 +36,7 @@ class ParentNode(HTMLNode):
         if self.tag is None or self.tag == "" or self.tag.isspace():
             raise ValueError("A ParentNode must contain have a tag.")
         elif self.children is None or type(self.children) is not list or len(self.children) == 0:
+            print(self)
             raise ValueError("A ParentNode must have a children list containing of at least one child node.")
         else:
             return f'<{" ".join([v for v in [self.tag, self.props_to_html()] if v != ""])}>{"".join([c.to_html() for c in self.children])}</{self.tag}>\n'
